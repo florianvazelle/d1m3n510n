@@ -25,7 +25,11 @@ var game = new Phaser.Game(config);
 var player;
 var cursors;
 
+var bullets;
+var enemies;
+
 var arena;
+var lastFire = 0;
 var helpText;
 
 function preload() {
@@ -41,6 +45,9 @@ function preload() {
   this.load.tilemapCSV('map', './assets/map.csv');
 
   this.load.glsl('dimension', 'shaders/basic.frag');
+
+  this.load.atlas('space', 'assets/space.png', 'assets/space.json');
+  this.load.atlas('explosion', 'assets/explosion.png', 'assets/explosion.json');
 
 }
 
@@ -78,6 +85,12 @@ function create() {
     runChildUpdate: true
   });
 
+  bullets = this.physics.add.group({
+    classType: Bullet,
+    maxSize: 30,
+    runChildUpdate: true
+  });
+
   this.physics.add.collider(player, layer);
 
   cursors = this.input.keyboard.createCursorKeys();
@@ -91,6 +104,59 @@ function create() {
   for (var i = 0; i < 6; i++) {
     this.launchEnemy();
   }
+
+  var xparticles = this.add.particles('explosion');
+  xparticles.createEmitter({
+    frame: 'red',
+    angle: {
+      min: 0,
+      max: 360,
+      steps: 32
+    },
+    lifespan: 1000,
+    speed: 400,
+    quantity: 32,
+    scale: {
+      start: 0.3,
+      end: 0
+    },
+    on: false
+  });
+
+  xparticles.createEmitter({
+    frame: 'muzzleflash2',
+    lifespan: 200,
+    scale: {
+      start: 2,
+      end: 0
+    },
+    rotate: {
+      start: 0,
+      end: 180
+    },
+    on: false
+  });
+
+  this.physics.add.overlap(bullets, enemies, (bullet, enemy) => {
+    xparticles.emitParticleAt(enemy.x, enemy.y);
+
+    this.cameras.main.shake(500, 0.01);
+
+    bullet.kill();
+    enemy.kill();
+  }, (bullet, enemy) => {
+    return (bullet.active && enemy.active)
+  }, this);
+
+  this.physics.add.collider(player, enemies, (player, enemy) => {
+    xparticles.emitParticleAt(player.x, player.y);
+    this.cameras.main.shake(500, 0.01);
+    this.scene.pause();
+  }, (player, enemy) => {
+    return enemy.active
+  }, this);
+
+  this.input.mouse.disableContextMenu();
 }
 
 function launchEnemy() {
@@ -101,7 +167,7 @@ function launchEnemy() {
   }
 }
 
-function update() {
+function update(time) {
   if (spawnEnemy()) {
     //this.launchEnemy();
   }
@@ -125,6 +191,19 @@ function update() {
   } else {
     player.anims.play('idle', true);
   }
+
+  var pointer = this.input.activePointer;
+
+  if (pointer.isDown && time > lastFire) {
+    var bullet = bullets.get();
+
+    if (bullet) {
+      bullet.fire(player, pointer.x, pointer.y);
+
+      lastFire = time + 100;
+    }
+  }
+
 }
 
 function getHelpMessage() {
