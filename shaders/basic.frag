@@ -97,7 +97,7 @@ vec3 draw_marble(float f) {
 
 void main(void) {
   vec2 p = gl_FragCoord.xy / resolution.xy;
-  vec2 uv = p * vec2(resolution.x / resolution.y, 1.0);
+  vec2 uv = p * vec2(resolution.x / resolution.y, 1.0) + time / 15.0;
   vec2 split = vec2(0.5, 0.5);
 
   float f = 0.0;
@@ -117,6 +117,6 @@ void main(void) {
     col = draw_marble(f);
   }
 
-  vec3 tex = texture2D(iChannel0, p).xyz;
+  vec3 tex = texture2D(iChannel0, -p).xyz;
   gl_FragColor = vec4(tex * col, 1.0);
 }
