@@ -29,6 +29,10 @@ var bullets;
 var enemies;
 
 var arena;
+
+var score = 0;
+var life = 5;
+
 var lastFire = 0;
 var helpText;
 
@@ -78,6 +82,11 @@ function create() {
   player.setDamping(true)
 
   arena = new Phaser.Geom.Rectangle(0, 0, config.width, config.height);
+  var dimension = [];
+  dimension.push(new Phaser.Geom.Rectangle(0, 0, config.width / 2, config.height / 2));
+  dimension.push(new Phaser.Geom.Rectangle(config.width / 2, 0, config.width / 2, config.height / 2));
+  dimension.push(new Phaser.Geom.Rectangle(0, config.height / 2, config.width / 2, config.height / 2));
+  dimension.push(new Phaser.Geom.Rectangle(config.width / 2, config.height / 2, config.width / 2, config.height / 2));
 
   enemies = this.physics.add.group({
     classType: Enemy,
@@ -102,7 +111,7 @@ function create() {
   helpText.setScrollFactor(0);
 
   for (var i = 0; i < 6; i++) {
-    this.launchEnemy();
+    //this.launchEnemy();
   }
 
   var xparticles = this.add.particles('explosion');
@@ -141,17 +150,25 @@ function create() {
     xparticles.emitParticleAt(enemy.x, enemy.y);
 
     this.cameras.main.shake(500, 0.01);
+    score += 1;
 
     bullet.kill();
     enemy.kill();
   }, (bullet, enemy) => {
-    return (bullet.active && enemy.active)
+    return (bullet.active && enemy.active && Phaser.Geom.Rectangle.ContainsPoint(dimension[enemy.zone], new Phaser.Geom.Point(enemy.x, enemy.y)))
   }, this);
 
   this.physics.add.collider(player, enemies, (player, enemy) => {
     xparticles.emitParticleAt(player.x, player.y);
+
     this.cameras.main.shake(500, 0.01);
-    this.scene.pause();
+    life--;
+
+    enemies.clear(true, true);
+
+    if(life == 0) {
+    this.scene.restart();
+  }
   }, (player, enemy) => {
     return enemy.active
   }, this);
@@ -169,7 +186,7 @@ function launchEnemy() {
 
 function update(time) {
   if (spawnEnemy()) {
-    //this.launchEnemy();
+    this.launchEnemy();
   }
 
   player.body.setVelocity(0);
@@ -207,5 +224,5 @@ function update(time) {
 }
 
 function getHelpMessage() {
-  return 'Arrow keys to move.';
+  return (score == 0) ? 'Arrow keys to move.' : 'Score : ' + score + '\nLife : ' + life;
 }

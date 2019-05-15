@@ -9,19 +9,20 @@ var Enemy = new Phaser.Class({
 
       this.setDepth(1);
 
+      this.zone = 0;
       this.hit = true;
       this.speed = 100;
-      this.target = new Phaser.Math.Vector2();
+      this.target = new Phaser.Geom.Point();
     },
 
   launch: function() {
     this.play('idle');
 
+    var zone_colors = [0x0c3d6f, 0x764f55, 0x214531, 0xff0000];
+    this.zone = Math.floor(Math.random() * zone_colors.length);
+    this.setTintFill(zone_colors[this.zone]);
 
-    var colors = [0xff0000, 0x00ff00, 0x0000ff, 0x00ffff];
-    this.setTintFill(colors[Math.floor(Math.random() * colors.length)]);
-
-    var p = new Phaser.Math.Vector2();
+    var p = new Phaser.Geom.Point();
     Phaser.Geom.Rectangle.Random(arena, p);
 
     this.speed = Phaser.Math.Between(50, 75);
