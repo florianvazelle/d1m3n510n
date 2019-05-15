@@ -1,14 +1,38 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <title></title>
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.17.0/dist/phaser.min.js"></script>
-    <script type="text/javascript" src="./scripts/utils.js"></script>
-      <script type="text/javascript" src="./scripts/objects/bullet.js"></script>
-    <script type="text/javascript" src="./scripts/objects/enemy.js"></script>
-    <script type="text/javascript" src="./scripts/game.js"></script>
-  </head>
-  <body>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>d1m3n510n</title>
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.17.0/dist/phaser.min.js"></script>
+  <script type="text/javascript" src="./scripts/Utils.js"></script>
+
+  <script type="text/javascript" src="./scripts/GlobalVariables.js"></script>
+  <script type="text/javascript" src="./scripts/GamePlay.js"></script>
+
+  <script type="text/javascript" src="./scripts/Objects/Bullet.js"></script>
+  <script type="text/javascript" src="./scripts/Objects/Enemy.js"></script>
+</head>
+
+<body>
+  <script>
+    var config = {
+      type: Phaser.AUTO,
+      width: 512,
+      height: 512,
+      physics: {
+        default: 'arcade',
+        arcade: {
+          gravity: {
+            y: 0
+          }
+        }
+      },
+      scene: myGame.scenes
+    };
+
+    var game = new Phaser.Game(config);
+  </script>
+</body>
+
 </html>

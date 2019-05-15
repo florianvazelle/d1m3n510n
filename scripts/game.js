@@ -82,11 +82,11 @@ function create() {
   player.setDamping(true)
 
   arena = new Phaser.Geom.Rectangle(0, 0, config.width, config.height);
-  var dimension = [];
-  dimension.push(new Phaser.Geom.Rectangle(0, 0, config.width / 2, config.height / 2));
-  dimension.push(new Phaser.Geom.Rectangle(config.width / 2, 0, config.width / 2, config.height / 2));
-  dimension.push(new Phaser.Geom.Rectangle(0, config.height / 2, config.width / 2, config.height / 2));
-  dimension.push(new Phaser.Geom.Rectangle(config.width / 2, config.height / 2, config.width / 2, config.height / 2));
+  var dimensions = [];
+  dimensions.push(new Phaser.Geom.Rectangle(0, 0, config.width / 2, config.height / 2));
+  dimensions.push(new Phaser.Geom.Rectangle(config.width / 2, 0, config.width / 2, config.height / 2));
+  dimensions.push(new Phaser.Geom.Rectangle(0, config.height / 2, config.width / 2, config.height / 2));
+  dimensions.push(new Phaser.Geom.Rectangle(config.width / 2, config.height / 2, config.width / 2, config.height / 2));
 
   enemies = this.physics.add.group({
     classType: Enemy,
@@ -155,7 +155,7 @@ function create() {
     bullet.kill();
     enemy.kill();
   }, (bullet, enemy) => {
-    return (bullet.active && enemy.active && Phaser.Geom.Rectangle.ContainsPoint(dimension[enemy.zone], new Phaser.Geom.Point(enemy.x, enemy.y)))
+    return (bullet.active && enemy.active && Phaser.Geom.Rectangle.ContainsPoint(dimensions[enemy.zone], new Phaser.Geom.Point(enemy.x, enemy.y)))
   }, this);
 
   this.physics.add.collider(player, enemies, (player, enemy) => {
@@ -166,9 +166,9 @@ function create() {
 
     enemies.clear(true, true);
 
-    if(life == 0) {
-    this.scene.restart();
-  }
+    if (life == 0) {
+      this.scene.restart();
+    }
   }, (player, enemy) => {
     return enemy.active
   }, this);

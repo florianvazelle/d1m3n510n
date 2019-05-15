@@ -1,19 +1,16 @@
 var Enemy = new Phaser.Class({
 
   Extends: Phaser.Physics.Arcade.Sprite,
+  initialize: function Enemy(scene) {
+    Phaser.Physics.Arcade.Sprite.call(this, scene, 0, 0, 'player');
 
-  initialize:
+    this.setDepth(1);
 
-    function Enemy(scene) {
-      Phaser.Physics.Arcade.Sprite.call(this, scene, 0, 0, 'player');
-
-      this.setDepth(1);
-
-      this.zone = 0;
-      this.hit = true;
-      this.speed = 100;
-      this.target = new Phaser.Geom.Point();
-    },
+    this.zone = 0;
+    this.hit = true;
+    this.speed = 100;
+    this.target = new Phaser.Geom.Point();
+  },
 
   launch: function() {
     this.play('idle');
@@ -43,7 +40,6 @@ var Enemy = new Phaser.Class({
     this.setActive(false);
     this.setVisible(false);
     this.body.stop();
-    this.scene.launchEnemy();
   }
 
 });
