@@ -16,9 +16,9 @@ var Bullet = new Phaser.Class({
 
     this.setActive(true);
     this.setVisible(true);
-    this.setPosition(player.x, player.y);
+    this.setPosition(myGame.player.x, myGame.player.y);
 
-    this.body.reset(player.x, player.y);
+    this.body.reset(myGame.player.x, myGame.player.y);
 
     this.body.setSize(10, 10, true);
 

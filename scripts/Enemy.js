@@ -20,7 +20,9 @@ var Enemy = new Phaser.Class({
     this.setTintFill(zone_colors[this.zone]);
 
     var p = new Phaser.Geom.Point();
-    Phaser.Geom.Rectangle.Random(arena, p);
+    var arenaOuter = new Phaser.Geom.Rectangle(0, 0, config.width, config.height);
+    var arenaInner = new Phaser.Geom.Rectangle(myGame.player.x - 50 / 2, myGame.player.y - 50 / 2, 50, 50);
+    Phaser.Geom.Rectangle.RandomOutside(arenaOuter, arenaInner, p);
 
     this.speed = Phaser.Math.Between(50, 75);
 
@@ -32,7 +34,7 @@ var Enemy = new Phaser.Class({
   },
 
   update: function(time, delta) {
-    var angle = Phaser.Geom.Line.Angle(new Phaser.Geom.Line(this.x, this.y, player.x, player.y));
+    var angle = Phaser.Geom.Line.Angle(new Phaser.Geom.Line(this.x, this.y, myGame.player.x, myGame.player.y));
     this.scene.physics.velocityFromRotation(angle, this.speed, this.body.velocity);
   },
 
