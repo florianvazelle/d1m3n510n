@@ -1,28 +1,29 @@
-import myGame from "./GlobalVariables.js"
+export class Bullet extends Phaser.Physics.Arcade.Sprite {
+  private speed: number;
+  private lifespan: number;
 
-var Bullet = new Phaser.Class({
+  constructor(scene: Phaser.Scene, x: number, y: number, texture: string, frame?: string | number) {
+    super(scene, x, y, texture, frame);
+  }
 
-  Extends: Phaser.Physics.Arcade.Image,
-  initialize: function Bullet(scene) {
-    Phaser.Physics.Arcade.Image.call(this, scene, 0, 0, 'space', 'blaster');
-
+  init(): void {
     this.setBlendMode(1);
     this.setDepth(1);
 
     this.speed = 800;
     this.lifespan = 1000;
-  },
+  }
 
-  fire: function(x, y) {
+  fire(player: Phaser.Physics.Arcade.Sprite, x: number, y: number): void {
     this.lifespan = 1000;
 
     this.setActive(true);
     this.setVisible(true);
-    this.setPosition(myGame.player.x, myGame.player.y);
+    this.setPosition(player.x, player.y);
 
-    this.body.reset(myGame.player.x, myGame.player.y);
+    this.body.reset(player.x, player.y);
 
-    this.body.setSize(10, 10, true);
+    this.body.setSize(10, 10);
 
     var angle = Phaser.Geom.Line.Angle(new Phaser.Geom.Line(this.x, this.y, x, y));
     this.setAngle(angle * Phaser.Math.RAD_TO_DEG);
@@ -31,22 +32,20 @@ var Bullet = new Phaser.Class({
 
     this.body.velocity.x *= 2;
     this.body.velocity.y *= 2;
-  },
+  }
 
-  update: function(time, delta) {
+  update(time: number, delta: number): void {
     this.lifespan -= delta;
 
     if (this.lifespan <= 0) {
       this.kill();
     }
-  },
+  }
 
-  kill: function() {
+  kill(): void {
     this.setActive(false);
     this.setVisible(false);
     this.body.stop();
   }
 
-});
-
-export default Bullet;
+}
