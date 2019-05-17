@@ -4,10 +4,8 @@ export class Bullet extends Phaser.Physics.Arcade.Sprite {
 
   constructor(scene: Phaser.Scene) {
     super(scene, 0, 0, 'space', 'blaster');
-  }
 
-  init(): void {
-    this.setBlendMode(1);
+    this.setBlendMode(Phaser.BlendModes.ADD);
     this.setDepth(1);
 
     this.speed = 800;

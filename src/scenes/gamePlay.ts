@@ -93,14 +93,14 @@ export class GamePlay extends Phaser.Scene {
 
     /* Define Groups */
     this.enemies = this.physics.add.group({
-      /* classType: Enemy, */
-      maxSize: 60,
+      /* classType: Enemy,
+      maxSize: 60, */
       runChildUpdate: true
     });
 
     this.bullets = this.physics.add.group({
-      /* classType: Bullet, */
-      maxSize: 30,
+      /* classType: Bullet,
+      maxSize: 30, */
       runChildUpdate: true
     });
 

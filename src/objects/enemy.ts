@@ -14,9 +14,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 
   constructor(scene: Phaser.Scene) {
     super(scene, 0, 0, 'player');
-  }
 
-  init() {
     this.zone = 0;
     this.speed = 100;
   }
