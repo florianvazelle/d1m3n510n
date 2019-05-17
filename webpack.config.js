@@ -12,21 +12,16 @@ module.exports = {
   devtool: false,
   module: {
     rules: [{
-      test: /\.js$/,
-      exclude: /node_modules/,
-      use: {
-        loader: "babel-loader"
-      }
+      test: /\.tsx?$/,
+      use: 'ts-loader',
+      exclude: /node_modules/
     }, {
-      test: [/\.vert$/, /\.frag$/],
-      use: "file-loader"
-    }, {
-      test: /\.(gif|png|jpe?g|svg|xml)$/i,
-      use: "file-loader"
-    }, {
-      test: /\.csv$/,
+      test: /\.(csv|png|frag)$/,
       use: "file-loader"
     }]
+  },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js']
   },
   plugins: [
     new CleanWebpackPlugin(["dist"], {
