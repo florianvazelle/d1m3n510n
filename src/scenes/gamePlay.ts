@@ -98,13 +98,11 @@ export class GamePlay extends Phaser.Scene {
       runChildUpdate: true
     });
 
-    let conf: Phaser.Types.GameObjects.Group.GroupCreateConfig = {
-      classType: Bullet,
+    this.bullets = this.physics.add.group({
+      /* classType: Bullet, */
       maxSize: 30,
       runChildUpdate: true
-    };
-
-    this.bullets = this.physics.add.group(conf);
+    });
 
     /* Settings */
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -205,8 +203,10 @@ export class GamePlay extends Phaser.Scene {
     /* Shoot */
     var pointer = this.input.activePointer;
     if (pointer.isDown && time > this.lastFire) {
-      var bullet: Bullet = this.bullets.get();
+      var bullet = new Bullet(this);
+      //var bullet: Bullet = this.bullets.get();
       if (bullet) {
+        this.bullets.add(bullet, true);
         bullet.fire(this.player, pointer.x, pointer.y);
         this.lastFire = time + 100;
       }
@@ -214,8 +214,12 @@ export class GamePlay extends Phaser.Scene {
   }
 
   private launchEnemy(): void {
-    var b: Enemy = this.enemies.get();
-    if (b) b.launch(this.player);
+    var enemy = new Enemy(this);
+    //var enemy: Enemy = this.enemies.get();
+    if (enemy) {
+      this.enemies.add(enemy, true);
+      enemy.launch(this.player);
+    }
   }
 
   private spawnEnemy(): boolean {

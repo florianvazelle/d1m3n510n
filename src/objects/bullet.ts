@@ -2,8 +2,8 @@ export class Bullet extends Phaser.Physics.Arcade.Sprite {
   private speed: number;
   private lifespan: number;
 
-  constructor(scene: Phaser.Scene, x: number, y: number, texture: string, frame?: string | number) {
-    super(scene, x, y, texture, frame);
+  constructor(scene: Phaser.Scene) {
+    super(scene, 0, 0, 'space', 'blaster');
   }
 
   init(): void {
